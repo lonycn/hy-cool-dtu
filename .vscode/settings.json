@@ -1,0 +1,104 @@
+{
+  "files.associations": {
+    "电箱控制程序修改说明.C": "cpp",
+    "ota_manager.h": "c",
+    "ota_config.h": "c"
+  },
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+  "C_Cpp.default.intelliSenseMode": "gcc-arm",
+  "C_Cpp.default.compilerPath": "/opt/homebrew/bin/arm-none-eabi-gcc",
+  "C_Cpp.default.cStandard": "c11",
+  "C_Cpp.default.cppStandard": "c++17",
+  "C_Cpp.default.includePath": [
+    "${workspaceFolder}/app/**",
+    "${workspaceFolder}/Nano/**",
+    "${workspaceFolder}/app/ota/include",
+    "/opt/homebrew/arm-none-eabi/include",
+    "/opt/homebrew/lib/gcc/arm-none-eabi/*/include"
+  ],
+  "C_Cpp.default.defines": [
+    "__ARM_ARCH_7M__",
+    "__ARM_ARCH",
+    "__arm__",
+    "NANO100SD3BN",
+    "USE_STDPERIPH_DRIVER",
+    "OTA_ENABLE=1"
+  ],
+  "cmake.configureOnOpen": true,
+  "cmake.buildDirectory": "${workspaceFolder}/build",
+  "cmake.generator": "Unix Makefiles",
+  "cmake.configureArgs": [
+    "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/arm-none-eabi.cmake",
+    "-DCMAKE_BUILD_TYPE=Debug"
+  ],
+  "platformio-ide.useBuiltinPIOCore": true,
+  "platformio-ide.activateProjectOnTextEditorOpened": false,
+  "platformio-ide.autoRebuildAutocompleteIndex": true,
+  "files.associations": {
+    "*.h": "c",
+    "*.c": "c",
+    "*.cpp": "cpp",
+    "*.hpp": "cpp",
+    "*.s": "asm",
+    "*.S": "asm",
+    "*.ld": "ld",
+    "*.cfg": "properties",
+    "*.jlink": "properties"
+  },
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.rulers": [80, 120],
+  "editor.wordWrap": "bounded",
+  "editor.wordWrapColumn": 120,
+  "search.exclude": {
+    "**/build/**": true,
+    "**/.pio/**": true,
+    "**/node_modules/**": true,
+    "**/firmware/**": true,
+    "**/download/**": true,
+    "**/*.bin": true,
+    "**/*.hex": true,
+    "**/*.elf": true,
+    "**/*.map": true,
+    "**/*.o": true,
+    "**/*.a": true
+  },
+  "files.watcherExclude": {
+    "**/build/**": true,
+    "**/.pio/**": true,
+    "**/firmware/**": true,
+    "**/download/**": true
+  },
+  "terminal.integrated.env.osx": {
+    "PATH": "/opt/homebrew/bin:${env:PATH}"
+  },
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "C_Cpp.formatting": "clang-format",
+  "C_Cpp.clang_format_style": "file",
+  "editor.formatOnSave": true,
+  "editor.formatOnType": false,
+  "git.ignoreLimitWarning": true,
+  "git.detectSubmodules": false,
+  "extensions.showRecommendationsOnlyOnDemand": false,
+  "debug.console.fontSize": 14,
+  "debug.inlineValues": true,
+  "debug.showBreakpointsInOverviewRuler": true,
+  "task.autoDetect": "on",
+  "task.showDecorations": true,
+  "cortex-debug.armToolchainPath": "/opt/homebrew/bin",
+  "cortex-debug.JLinkGDBServerPath": "/Applications/SEGGER/JLink/JLinkGDBServerCLExe",
+  "cortex-debug.openocdPath": "/opt/homebrew/bin/openocd",
+  "C_Cpp.autoAddFileAssociations": true,
+  "C_Cpp.intelliSenseEngine": "Default",
+  "C_Cpp.enhancedColorization": "Enabled",
+  "C_Cpp.errorSquiggles": "Enabled",
+  "C_Cpp.codeAnalysis.exclude": {
+    "**/build/**": true,
+    "**/.pio/**": true
+  },
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": true
+}

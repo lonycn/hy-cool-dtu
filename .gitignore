@@ -1,0 +1,100 @@
+# Build directories
+build/
+.pio/
+cmake-build-*/
+
+# Object files
+*.o
+*.obj
+*.elf
+*.hex
+*.bin
+*.map
+
+# Debug files
+*.dwarf
+*.dSYM/
+
+# IDE files
+.vscode/settings.json.local
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Cache files
+*.cache
+.cache/
+
+# Dependencies
+node_modules/
+.npm/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# Firmware files
+firmware/
+download/
+
+# Test outputs
+test_results/
+coverage/
+
+# Documentation build
+docs/_build/
+site/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editor backup files
+*~
+.#*
+\#*#
+
+# Platform specific
+.platformio
+.pio
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# J-Link
+JLink.log
+*.jlink
+
+# OpenOCD
+openocd.log
+
+# Backup files
+*_backup_*/
+cleanup_backup_*/

@@ -1,0 +1,74 @@
+# Build directories
+build/
+obj/
+bin/
+dist/
+
+# Compiled object files
+*.o
+*.obj
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Generated files
+*.d
+*.dep
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.tmp
+*.temp
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Log files
+*.log
+
+# Temporary files
+temp/
+tmp/
+
+# Generated documentation
+docs/html/
+docs/latex/
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+CTestTestfile.cmake
+
+# Specific to this project
+_desktop.ini
+*.txt.bak
+*.c.bak
+*.h.bak
+*.C.bak
+*.H.bak 

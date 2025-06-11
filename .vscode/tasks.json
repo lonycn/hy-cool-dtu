@@ -1,0 +1,322 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Project (CMake)",
+            "type": "shell",
+            "command": "${workspaceFolder}/tools/scripts/build.sh",
+            "args": ["Debug", "cmake"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Build Project (PlatformIO)",
+            "type": "shell",
+            "command": "${workspaceFolder}/tools/scripts/build.sh",
+            "args": ["Debug", "pio"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Build Release (CMake)",
+            "type": "shell",
+            "command": "${workspaceFolder}/tools/scripts/build.sh",
+            "args": ["Release", "cmake"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Clean Build",
+            "type": "shell",
+            "command": "${workspaceFolder}/tools/scripts/build.sh",
+            "args": ["clean"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Flash Firmware",
+            "type": "shell",
+            "command": "${workspaceFolder}/tools/scripts/flash.sh",
+            "args": ["${workspaceFolder}/build/hy-cool-dtu.bin"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build Project (CMake)",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Debug with J-Link",
+            "type": "shell",
+            "command": "${workspaceFolder}/tools/scripts/debug.sh",
+            "args": ["jlink"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build Project (CMake)",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Debug with OpenOCD",
+            "type": "shell",
+            "command": "${workspaceFolder}/tools/scripts/debug.sh",
+            "args": ["openocd"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build Project (CMake)",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Start RTT Debug",
+            "type": "shell",
+            "command": "${workspaceFolder}/tools/scripts/debug.sh",
+            "args": ["jlink", "NANO100SD3BN", "${workspaceFolder}/build/hy-cool-dtu.elf", "rtt"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Memory Debug",
+            "type": "shell",
+            "command": "${workspaceFolder}/tools/scripts/debug.sh",
+            "args": ["jlink", "NANO100SD3BN", "${workspaceFolder}/build/hy-cool-dtu.elf", "memory"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build Project (CMake)",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Detect Hardware",
+            "type": "shell",
+            "command": "${workspaceFolder}/tools/scripts/detect_device.sh",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Test OTA Module",
+            "type": "shell",
+            "command": "python3",
+            "args": ["${workspaceFolder}/tools/test/test_ota.py", "test"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Start OTA Test Server",
+            "type": "shell",
+            "command": "python3",
+            "args": ["${workspaceFolder}/tools/test/test_ota.py", "server", "--port", "8080"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false
+            },
+            "isBackground": true,
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Generate Test Firmware",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/test/test_ota.py", 
+                "generate", 
+                "--version", "${input:firmwareVersion}",
+                "--size", "${input:firmwareSize}"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Format Code",
+            "type": "shell",
+            "command": "clang-format",
+            "args": [
+                "-i",
+                "-style=file",
+                "${workspaceFolder}/app/**/*.c",
+                "${workspaceFolder}/app/**/*.h"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Check Code Style",
+            "type": "shell",
+            "command": "clang-format",
+            "args": [
+                "--dry-run",
+                "--Werror",
+                "-style=file",
+                "${workspaceFolder}/app/**/*.c",
+                "${workspaceFolder}/app/**/*.h"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Setup Development Environment",
+            "type": "shell",
+            "command": "${workspaceFolder}/quick_setup.sh",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "firmwareVersion",
+            "description": "固件版本号",
+            "default": "1.0.0",
+            "type": "promptString"
+        },
+        {
+            "id": "firmwareSize",
+            "description": "固件大小 (KB)",
+            "default": "100",
+            "type": "promptString"
+        }
+    ]
+} 

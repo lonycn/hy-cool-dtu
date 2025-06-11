@@ -1,0 +1,75 @@
+{
+    "recommendations": [
+        // C/C++ 开发
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cpptools-themes",
+        
+        // CMake 支持
+        "ms-vscode.cmake-tools",
+        "twxs.cmake",
+        
+        // PlatformIO 支持
+        "platformio.platformio-ide",
+        
+        // 调试支持
+        "marus25.cortex-debug",
+        "dan-c-underwood.arm",
+        
+        // Git 支持
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        
+        // 代码格式化
+        "xaver.clang-format",
+        "ms-vscode.vscode-clang-format",
+        
+        // 语法高亮
+        "ms-vscode.vscode-embedded-tools",
+        "zixuanwang.linkerscript",
+        
+        // 文档支持
+        "yzhang.markdown-all-in-one",
+        "davidanson.vscode-markdownlint",
+        
+        // 工具支持
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        
+        // 主题和图标
+        "pkief.material-icon-theme",
+        "github.github-vscode-theme",
+        
+        // 实用工具
+        "aaron-bond.better-comments",
+        "streetsidesoftware.code-spell-checker",
+        "oderwat.indent-rainbow",
+        "mechatroner.rainbow-csv",
+        "ms-vscode.hexeditor",
+        
+        // 嵌入式开发特定
+        "keroc.hex-fmt",
+        "ms-vscode.vscode-serial-monitor",
+        
+        // 项目管理
+        "alefragnani.project-manager",
+        "formulahendry.auto-rename-tag",
+        
+        // 终端增强
+        "ms-vscode.vscode-terminal-tabs",
+        
+        // 代码质量
+        "sonarsource.sonarlint-vscode",
+        "ms-vscode.vscode-clang-tidy",
+        
+        // 配置文件支持
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-json"
+    ],
+    "unwantedRecommendations": [
+        // 不需要的扩展
+        "ms-vscode.vscode-typescript-next",
+        "ms-vscode.node-debug2",
+        "ms-vscode.js-debug-nightly"
+    ]
+} 

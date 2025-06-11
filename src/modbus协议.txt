@@ -1,0 +1,29 @@
+                           地址      参数
+#define    cDeviceNum      0x01    //设备地址
+#define    cLoopStatus     0x02   循环状态  0:不循环  1:循环同一首歌  2:顺序循环
+#define    cDirTotalNum    0x03  //可用的目录数 包括根目录1-15
+#define    cDirSongNum1    0x04  //根目录下的歌曲数
+#define    cDirSongNum2    0x05  //目录1下的歌曲数
+#define    cDirSongNum3    0x06  //目录2下的歌曲数
+#define    cDirSongNum4    0x07  //目录3下的歌曲数
+#define    cDirSongNum5    0x08  //目录4下的歌曲数
+#define    cDirSongNum6    0x09  //目录5下的歌曲数
+#define    cDirSongNum7    0x0a  //目录6下的歌曲数
+#define    cDirSongNum8    0x0b  //目录7下的歌曲数
+#define    cDirSongNum9    0x0c  //目录8下的歌曲数
+#define    cDirSongNum10    0x0d //目录9下的歌曲数
+#define    cDirSongNum11    0x0e //目录10下的歌曲数
+#define    cDirSongNum12    0x0f //目录11下的歌曲数
+#define    cDirSongNum13    0x10 //目录12下的歌曲数
+#define    cDirSongNum14    0x11 //目录13下的歌曲数
+#define    cDirSongNum15    0x12 //目录14下的歌曲数
+
+#define    cPlaySong        0x13    //0-199  0:随机
+#define    cVolume          0x14   //0-31 音量  32 音量加  33 音量减
+#define    cStopplay        0x15   //  1:停止
+#define    cSuspend         0x16   //1:suspend  0:cancel suspend
+#define    changedir        0x17   //0XF1--0XFF
+#define    PausePlay        0x18
+
+
+所有参数的读写适用0x03命令, 只支持单地址读写操作
