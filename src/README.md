@@ -25,59 +25,145 @@
 ## 项目结构
 
 ```
-App_with_ota/
-├── README.md                    # 项目说明文档
-├── CMakeLists.txt              # CMake构建配置
-├── Makefile                    # 传统Makefile构建
+src/                            # 源代码目录
+├── README.md                   # 项目说明文档
+├── CMakeLists.txt             # CMake构建配置
+├── Makefile                   # 传统Makefile构建
 ├──
-├── include/                    # 头文件目录
+├── include/                   # 头文件目录
+│   ├── constants.h            # 常量定义
+│   ├── core_cm0plus.h         # ARM Cortex-M0+核心定义
 │   ├── global.h               # 全局定义和变量
-│   ├── sys.h                  # 系统函数声明
-│   └── rtc.h                  # RTC函数声明
+│   ├── Nano100Series.h        # NANO100芯片系列定义
+│   ├── rtc.h                  # RTC函数声明
+│   ├── stdio.h                # 标准输入输出库
+│   ├── stdlib.h               # 标准库函数
+│   ├── string.h               # 字符串操作函数
+│   ├── stdint.h               # 标准整数类型
+│   └── sys.h                  # 系统函数声明
 ├──
-├── linker/                     # 链接器脚本
+├── linker/                    # 链接器脚本
 │   └── nano100_512k.ld       # NANO100B 512KB Flash链接脚本
 ├──
-├── ota/                        # OTA升级模块
+├── ota/                       # OTA升级模块
 │   ├── include/               # OTA头文件
-│   │   ├── ota_manager.h      # OTA管理器
-│   │   └── ota_config.h       # OTA配置
 │   ├── src/                   # OTA源文件
-│   │   ├── ota_manager.c      # OTA核心逻辑
-│   │   └── ota_config.c       # OTA配置实现
 │   ├── config/                # OTA配置文件
 │   └── test/                  # OTA测试文件
 ├──
-├── uart/                       # UART通信模块
+├── uart/                      # UART通信模块
 │   ├── SerInt-uart0.c         # UART0中断处理
+│   ├── SerInt-uart0-uart3.c   # UART0-UART3联合处理
 │   ├── SerInt_uart1.c         # UART1中断处理
 │   ├── SerInt_uart2.c         # UART2中断处理
 │   ├── SerInt_uart3.c         # UART3中断处理
 │   ├── SerInt_uart4.c         # UART4中断处理
 │   └── Simdata.c              # 模拟数据处理
 ├──
-├── led/                        # LED控制模块
-│   └── led.c                  # LED驱动
+├── sht2x/                     # 温湿度传感器模块
+│   ├── SHT2x.c                # SHT2x传感器驱动
+│   ├── I2C_HAL.c              # I2C硬件抽象层
+│   └── shx.h                  # 传感器头文件
 ├──
-├── alarm/                      # 报警模块
-│   └── SetAlarmFlag.c         # 报警标志设置
+├── sim7600/                   # 4G通信模块
+│   ├── sim7600_main.c         # 主控制逻辑
+│   ├── Sim7600_StatusMachine.c # 状态机实现
+│   ├── Sim7600Send.c          # 数据发送
+│   ├── Simply600ReceiveDeal.c # 数据接收处理
+│   ├── Combine.c              # 数据组合
+│   ├── Wifi_TranslateConfig.c # WiFi配置转换
+│   ├── cJSON.c                # JSON解析
+│   ├── cJSON.h                # JSON解析头文件
+│   ├── md5.h                  # MD5算法
+│   ├── Sim7600.H              # 模块头文件
+│   └── Test.c                 # 测试功能
 ├──
-├── main_loop.c                 # 主程序循环
+├── si24r1/                    # LoRa/无线通信模块
+│   ├── SI24R1.c               # SI24R1驱动
+│   └── SI24R11.c              # SI24R1变体驱动
+├──
+├── lcd/                       # LCD显示模块
+│   ├── lcd.c                  # LCD驱动
+│   └── lcd.h                  # LCD头文件
+├──
+├── led/ & workled/            # LED控制模块
+│   ├── led.c                  # 基础LED驱动
+│   ├── led.h                  # LED头文件
+│   └── workLed.c              # 工作状态LED
+├──
+├── alarm/ & alarm_led/        # 报警系统
+│   ├── SetAlarmFlag.c         # 报警标志设置
+│   ├── AlarmLed.c             # 报警LED控制
+│   └── alarm.h                # 报警头文件
+├──
+├── key/                       # 按键输入模块
+│   ├── key.C                  # 按键处理
+│   ├── Door.C                 # 门控检测
+│   ├── PowIn.c                # 电源输入
+│   └── PowIn1.c               # 电源输入备用
+├──
+├── dido/                      # 数字输入输出模块
+│   ├── dido.c                 # 数字IO控制
+│   └── dido.h                 # 数字IO头文件
+├──
+├── i2c/                       # I2C通信模块
+│   ├── IIC.c                  # I2C主驱动
+│   ├── IIC1.c                 # I2C备用驱动
+│   └── IIC-bak.c              # I2C备份驱动
+├──
+├── spi/                       # SPI通信模块
+│   ├── W25Q128.c              # W25Q128 Flash驱动
+│   ├── W25Q128-1.c            # W25Q128变体驱动
+│   └── W25QXX.h               # Flash头文件
+├──
+├── adc/                       # ADC模拟输入
+│   └── adc.c                  # ADC驱动
+├──
+├── pwm/                       # PWM控制模块
+│   └── PWM.C                  # PWM驱动
+├──
+├── switch/                    # 开关控制
+│   └── switch.c               # 开关驱动
+├──
+├── lora/                      # LoRa通信
+│   └── lora.c                 # LoRa协议实现
+├──
+├── watchdong/                 # 看门狗模块
+│   └── watchdog.c             # 看门狗驱动
+├──
+├── bl/                        # 引导加载器
+│   └── BL.c                   # 引导逻辑
+├──
+├── test_function/             # 测试功能
+│   └── TestFunction.c         # 测试用例
+├──
+├── main_loop.c                # 主程序循环
 ├── Modbus.c                   # Modbus协议实现
 ├── sys_flash.c                # Flash操作
-├── switch.c                   # 开关控制
-├── io.c                       # IO操作
-├── RI300CRC.c                 # CRC校验
-├── datastruct.c               # 数据结构
-├── Base_Para.C                # 基础参数
+├── io.c                       # 基础IO操作
+├── RI300CRC.c                 # CRC校验算法
+├── datastruct.c               # 数据结构处理
+├── switch.c                   # 开关控制主逻辑
+├── alarm.C                    # 报警处理主逻辑
+├── Base_Para.C                # 基础参数管理
 ├── HistoryData.C              # 历史数据处理
 ├── HistoryDataRead.C          # 历史数据读取
 ├── HistoryDataWrite.C         # 历史数据写入
-├── Tempalarm.C                # 温度报警
-├── alarm.C                    # 报警处理
+├── Tempalarm.C                # 温度报警处理
 ├── BL02D_Special.C            # BL02D特定功能
 ├── BL03D_BH_Para.C            # BL03D参数处理
-└── [各种UART Modbus文件]      # 多串口Modbus实现
+├── uart0_Modbus.c             # UART0 Modbus实现
+├── uart0_Modbus_uart3.c       # UART0-UART3 Modbus
+├── uart1_Modbus.c             # UART1 Modbus实现
+├── uart1_Modbus_LoraModbusMaste.c # UART1 LoRa Modbus主站
+├── uart2_Modbus.c             # UART2 Modbus实现
+├── uart2_Modbus_pc.c          # UART2 PC通信
+├── uart2_Modbus_tp.c          # UART2 触摸屏通信
+├── uart2_Modbus_LoraModbusMaste.c # UART2 LoRa Modbus主站
+├── uart3_Modbus.c             # UART3 Modbus实现
+├── uart4_dealdata.c           # UART4 数据处理
+├── uart4_Modbus_LoraModbusMaste.c # UART4 LoRa Modbus主站
+└── Modbus_LoraModbusMaster.c  # LoRa Modbus主站总控
 ```
 
 ## OTA 升级功能

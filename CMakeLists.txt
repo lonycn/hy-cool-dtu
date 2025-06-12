@@ -26,52 +26,123 @@ find_program(CMAKE_SIZE arm-none-eabi-size REQUIRED)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(COMMON_FLAGS "-mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -ffunction-sections -fdata-sections -Wall -Wextra -g3 -nostdlib")
+# ARM Cortex-M0+ 基本标志
+set(CPU_FLAGS "-mcpu=cortex-m0plus -mthumb -mfloat-abi=soft")
+set(COMMON_FLAGS "${CPU_FLAGS} -ffunction-sections -fdata-sections -Wall -g3")
 
-set(CMAKE_C_FLAGS "${COMMON_FLAGS} -std=c99")
-set(CMAKE_ASM_FLAGS "${COMMON_FLAGS}")
+# 编译器标志 - 使用基本设置，不依赖newlib
+set(CMAKE_C_FLAGS "${COMMON_FLAGS} -std=c99 -nostdlib -fno-builtin")
+set(CMAKE_ASM_FLAGS "${CPU_FLAGS}")
 
-# 链接器标志
-set(CMAKE_EXE_LINKER_FLAGS "${COMMON_FLAGS} -T${CMAKE_SOURCE_DIR}/Nano/EC_NANO100B_UART_Rx_Wakeup_PDMA_V1.00/Library/Device/Nuvoton/Nano100Series/Source/GCC/gcc_arm.ld -Wl,--gc-sections -Wl,--print-memory-usage")
+# 添加系统包含路径
+execute_process(
+    COMMAND ${CMAKE_C_COMPILER} -print-file-name=include
+    OUTPUT_VARIABLE ARM_GCC_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
-# 预处理器定义
+if(EXISTS "${ARM_GCC_INCLUDE_DIR}")
+    include_directories(${ARM_GCC_INCLUDE_DIR})
+endif()
+
+# 预处理器定义 - 避免重复定义
 add_definitions(
     -DNANO100B
     -DUSE_HAL_DRIVER
-    -DHSE_VALUE=12000000
-    -DOTA_ENABLE=1
-    -DOTA_MAX_FIRMWARE_SIZE=0x38000U
-    -DOTA_CHUNK_SIZE=1024
 )
+
+# 防止重复定义HSE_VALUE
+if(NOT DEFINED CUSTOM_HSE_VALUE)
+    add_definitions(-DHSE_VALUE=12000000UL)
+    set(CUSTOM_HSE_VALUE ON CACHE BOOL "HSE_VALUE已定义")
+endif()
+
+# 防止重复定义OTA相关宏
+if(NOT DEFINED CUSTOM_OTA_SIZE)
+    add_definitions(
+        -DOTA_ENABLE=1
+        -DOTA_MAX_FIRMWARE_SIZE=0x38000U
+        -DOTA_CHUNK_SIZE=1024
+    )
+    set(CUSTOM_OTA_SIZE ON CACHE BOOL "OTA宏已定义")
+endif()
 
 # 包含目录
 include_directories(
-          app
+    app
     app/ota/include
-    Nano/EC_NANO100B_UART_Rx_Wakeup_PDMA_V1.00/Library/CMSIS/Include
-    Nano/EC_NANO100B_UART_Rx_Wakeup_PDMA_V1.00/Library/Device/Nuvoton/Nano100Series/Include
-    Nano/EC_NANO100B_UART_Rx_Wakeup_PDMA_V1.00/Library/StdDriver/inc
-    Nano/modbus_ver3.4.2(3283)/App
+    src/include
+    src/ota/include
+    src/linker
 )
 
-# 源文件
-file(GLOB_RECURSE SOURCES 
-    "app/main.c"
-    "app/ota/src/*.c"
-    "Nano/EC_NANO100B_UART_Rx_Wakeup_PDMA_V1.00/Library/StdDriver/src/*.c"
-    "Nano/EC_NANO100B_UART_Rx_Wakeup_PDMA_V1.00/Library/Device/Nuvoton/Nano100Series/Source/system_Nano100Series.c"
+# 主要源文件
+set(MAIN_SOURCES
+    app/main.c
+    src/main_loop.c
+    src/Modbus.c
+    src/sys_flash.c
+    src/HistoryDataRead.C
+    src/Modbus_LoraModbusMaster.c
+    src/RI300CRC.c
+    src/BL03D_BH_Para.C
+    src/alarm.C
+    src/uart0_Modbus_uart3.c
+    src/uart3_Modbus.c
+    src/uart2_Modbus.c
+    src/uart4_dealdata.c
+    src/Base_Para.C
+    src/HistoryData.C
+    src/BL02D_Special.C
+    src/switch.c
+    src/io.c
+    src/Tempalarm.C
+    src/datastruct.c
+    src/uart0_Modbus.c
+    src/uart1_Modbus.c
 )
+
+# OTA源文件
+file(GLOB_RECURSE OTA_SOURCES 
+    "app/ota/src/*.c"
+    "src/ota/*.c"
+)
+
+# 模块源文件
+file(GLOB_RECURSE MODULE_SOURCES
+    "src/uart/*.c"
+    "src/dido/*.c"
+    "src/key/*.c"
+    "src/si24r1/*.c"
+    "src/bl/*.c"
+    "src/sim7600/*.c"
+    "src/workled/*.c"
+    "src/alarm/*.c"
+    "src/lora/*.c"
+    "src/switch/*.c"
+    "src/lcd/*.c"
+    "src/sht2x/*.c"
+    "src/adc/*.c"
+    "src/spi/*.c"
+    "src/i2c/*.c"
+    "src/watchdong/*.c"
+    "src/led/*.c"
+    "src/pwm/*.c"
+    "src/alarm_led/*.c"
+)
+
+# 合并所有源文件
+set(ALL_SOURCES ${MAIN_SOURCES} ${OTA_SOURCES} ${MODULE_SOURCES})
 
 # 排除测试文件
-list(FILTER SOURCES EXCLUDE REGEX ".*test.*")
-
-# 启动文件
-set(STARTUP_FILE "Nano/EC_NANO100B_UART_Rx_Wakeup_PDMA_V1.00/Library/Device/Nuvoton/Nano100Series/Source/GCC/startup_Nano100Series.S")
+list(FILTER ALL_SOURCES EXCLUDE REGEX ".*test.*")
 
 # 创建可执行文件
-add_executable(${PROJECT_NAME}.elf 
-    ${SOURCES}
-    ${STARTUP_FILE}
+add_executable(${PROJECT_NAME}.elf ${ALL_SOURCES})
+
+# 设置链接器脚本和标志
+set_target_properties(${PROJECT_NAME}.elf PROPERTIES
+    LINK_FLAGS "${CPU_FLAGS} -T${CMAKE_SOURCE_DIR}/src/linker/nano100_512k.ld -Wl,--gc-sections -Wl,--print-memory-usage -nostdlib"
 )
 
 # 生成二进制文件

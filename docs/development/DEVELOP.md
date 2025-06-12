@@ -3,28 +3,64 @@
 ## 项目结构
 
 ```
-hy-cool-dtu/
-├── Nano/
-│   ├── EC_NANO100B_UART_Rx_Wakeup_PDMA_V1.00/     # 新唐官方SDK
-│   │   ├── Library/                                # 硬件抽象层库
-│   │   └── SampleCode/                            # 示例代码
-│   ├── modbus_ver3.4.2(3283)/                    # 主要业务代码
-│   │   └── app/                                   # 应用程序代码
-│   │       ├── main_loop.c                        # 主循环程序
-│   │       ├── Modbus.c                          # Modbus协议实现
-│   │       ├── uart*.c                           # 串口通信模块
-│   │       ├── SIM7600/                          # 4G通信模块
-│   │       ├── lora/                             # LoRa通信模块
-│   │       ├── sht2x/                            # 温湿度传感器
-│   │       ├── adc/                              # ADC采集模块
-│   │       ├── lcd/                              # LCD显示模块
-│   │       ├── key/                              # 按键处理模块
-│   │       ├── led/                              # LED控制模块
-│   │       ├── dido/                             # 数字IO控制
-│   │       ├── alarm/                            # 报警处理模块
-│   │       └── ...                               # 其他功能模块
-│   ├── 电箱控制程序修改说明.C                        # 修改历史记录
-│   └── 修改说明.C.bak                              # 修改说明备份
+hy-cool-dtu/                                     # 项目根目录
+├── app/                                         # 应用程序入口层
+│   ├── ota/                                    # OTA应用层模块
+│   │   ├── include/                            # OTA应用层头文件
+│   │   ├── src/                                # OTA应用层源文件
+│   │   ├── config/                             # OTA配置文件
+│   │   └── test/                               # OTA测试文件
+│   └── main.c                                  # 主程序入口
+├── src/                                         # 源代码目录
+│   ├── include/                                # 项目头文件
+│   │   ├── constants.h                         # 常量定义
+│   │   ├── core_cm0plus.h                      # ARM核心定义
+│   │   ├── global.h                            # 全局定义
+│   │   ├── Nano100Series.h                     # NANO100芯片定义
+│   │   └── [其他系统头文件]                    # 标准库头文件
+│   ├── ota/                                    # OTA核心模块
+│   ├── uart/                                   # UART通信模块
+│   ├── sht2x/                                  # 温湿度传感器
+│   ├── sim7600/                                # 4G通信模块
+│   ├── si24r1/                                 # LoRa通信模块
+│   ├── lcd/                                    # LCD显示模块
+│   ├── led/ & workled/                         # LED控制模块
+│   ├── alarm/ & alarm_led/                     # 报警系统
+│   ├── key/                                    # 按键处理模块
+│   ├── dido/                                   # 数字IO控制
+│   ├── i2c/                                    # I2C通信模块
+│   ├── spi/                                    # SPI通信模块
+│   ├── adc/                                    # ADC采集模块
+│   ├── pwm/                                    # PWM控制模块
+│   ├── switch/                                 # 开关控制模块
+│   ├── lora/                                   # LoRa协议模块
+│   ├── watchdong/                              # 看门狗模块
+│   ├── bl/                                     # 引导加载器
+│   ├── test_function/                          # 测试功能模块
+│   ├── linker/                                 # 链接器脚本
+│   ├── main_loop.c                             # 主循环程序
+│   ├── Modbus.c                                # Modbus协议实现
+│   └── [其他功能源文件]                        # 各种功能模块源文件
+├── tools/                                       # 开发工具链
+│   ├── scripts/                                # 开发脚本
+│   │   ├── flash_firmware.sh                   # 完整烧录脚本
+│   │   ├── test_jlink.sh                       # J-Link测试
+│   │   └── [其他脚本]                          # 各种开发脚本
+│   ├── debug/                                  # 调试配置
+│   └── test/                                   # 测试工具
+├── docs/                                        # 文档系统
+│   ├── development/                            # 开发文档
+│   ├── manuals/                                # 用户手册
+│   ├── architecture/                           # 架构设计
+│   └── [其他文档]                              # 各种项目文档
+├── hardware/                                    # 硬件相关文件
+├── cmake/                                       # CMake配置
+├── .vscode/                                     # IDE配置
+├── CMakeLists.txt                              # CMake主配置
+├── platformio.ini                              # PlatformIO配置
+├── flash.sh                                    # 快速烧录脚本
+├── README.md                                   # 项目说明文档
+└── [其他配置文件]                              # 各种项目配置
 ```
 
 ## 核心文件说明

@@ -82,14 +82,31 @@ brew install --cask coolterm
 
 ```bash
 # 创建项目根目录
-mkdir -p ~/Projects/nano-ota-dev
-cd ~/Projects/nano-ota-dev
+mkdir -p ~/Projects/hy-cool-dtu
+cd ~/Projects/hy-cool-dtu
 
 # 创建项目结构
-mkdir -p {src,include,lib,build,tools,docs,tests}
-mkdir -p src/{ota,modbus,app}
-mkdir -p include/{ota,modbus,app}
-mkdir -p tools/{scripts,firmware}
+mkdir -p app/{ota/{include,src,config,test}}
+mkdir -p src/{include,ota/{include,src,config,test}}
+mkdir -p src/{uart,sht2x,sim7600,si24r1,lcd,led,workled}
+mkdir -p src/{alarm,alarm_led,key,dido,i2c,spi,adc,pwm}
+mkdir -p src/{switch,lora,watchdong,bl,test_function,linker}
+mkdir -p tools/{scripts,debug,test}
+mkdir -p docs/{development,manuals,architecture,reports,api}
+mkdir -p hardware/{pcb,schematic}
+mkdir -p cmake scripts
+
+# 创建主要配置文件
+touch CMakeLists.txt platformio.ini flash.sh quick_setup.sh
+touch README.md CHANGELOG.md CONTRIBUTING.md LICENSE .gitignore
+
+# 创建工具脚本
+touch tools/scripts/{build.sh,flash_firmware.sh,debug.sh,test_jlink.sh}
+touch tools/debug/{jlink_config.jlink,openocd_nano100.cfg}
+
+# 创建VS Code配置
+mkdir -p .vscode
+touch .vscode/{settings.json,launch.json,tasks.json,extensions.json}
 ```
 
 ### 2.2 配置 PlatformIO 项目

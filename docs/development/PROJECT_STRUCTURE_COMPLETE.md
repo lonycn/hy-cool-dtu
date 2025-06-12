@@ -12,33 +12,95 @@
 
 ```
 hy-cool-dtu/
-├── 📁 app/                        # 应用程序源码
-├── 📁 Nano/                       # NANO100芯片相关文件
+├── 📁 app/                        # 应用程序入口层
+│   ├── 📁 ota/                    # OTA应用层模块
+│   │   ├── 📂 include/            # OTA应用层头文件
+│   │   ├── 📂 src/                # OTA应用层源文件
+│   │   ├── 📂 config/             # OTA配置文件
+│   │   └── 📂 test/               # OTA测试文件
+│   └── 📄 main.c                  # 主程序入口文件
+├── 📁 src/                        # 源代码目录
+│   ├── 📁 include/                # 项目头文件
+│   │   ├── 📄 constants.h         # 常量定义
+│   │   ├── 📄 core_cm0plus.h      # ARM Cortex-M0+核心定义
+│   │   ├── 📄 global.h            # 全局定义和变量
+│   │   ├── 📄 Nano100Series.h     # NANO100芯片系列定义
+│   │   ├── 📄 stdio.h             # 标准输入输出库
+│   │   ├── 📄 stdlib.h            # 标准库函数
+│   │   ├── 📄 string.h            # 字符串操作函数
+│   │   ├── 📄 stdint.h            # 标准整数类型
+│   │   ├── 📄 rtc.h               # RTC函数声明
+│   │   └── 📄 sys.h               # 系统函数声明
+│   ├── 📁 ota/                    # OTA核心模块
+│   ├── 📁 uart/                   # UART通信模块
+│   ├── 📁 sht2x/                  # 温湿度传感器模块
+│   ├── 📁 sim7600/                # 4G通信模块
+│   ├── 📁 si24r1/                 # LoRa通信模块
+│   ├── 📁 lcd/                    # LCD显示模块
+│   ├── 📁 led/ & workled/         # LED控制模块
+│   ├── 📁 alarm/ & alarm_led/     # 报警系统模块
+│   ├── 📁 key/                    # 按键输入模块
+│   ├── 📁 dido/                   # 数字IO模块
+│   ├── 📁 i2c/                    # I2C通信模块
+│   ├── 📁 spi/                    # SPI通信模块
+│   ├── 📁 adc/                    # ADC模拟输入模块
+│   ├── 📁 pwm/                    # PWM控制模块
+│   ├── 📁 switch/                 # 开关控制模块
+│   ├── 📁 lora/                   # LoRa协议模块
+│   ├── 📁 watchdong/              # 看门狗模块
+│   ├── 📁 bl/                     # 引导加载器模块
+│   ├── 📁 test_function/          # 测试功能模块
+│   ├── 📁 linker/                 # 链接器脚本
+│   │   └── 📄 nano100_512k.ld    # NANO100B链接脚本
+│   ├── 📄 main_loop.c             # 主循环逻辑
+│   ├── 📄 Modbus.c                # Modbus协议实现
+│   └── 📄 [其他源文件]            # 各种功能源文件
 ├── 📁 tools/                      # 开发工具集
 │   ├── 📁 scripts/                # 构建和调试脚本
 │   │   ├── 🔧 build.sh            # 构建脚本 (CMake/PlatformIO)
-│   │   ├── 🔥 flash.sh            # 固件烧写脚本
+│   │   ├── 🔥 flash_firmware.sh   # 完整固件烧写脚本
 │   │   ├── 🐛 debug.sh            # 调试脚本 (J-Link/OpenOCD)
 │   │   ├── 🔍 detect_device.sh    # 硬件检测脚本
-│   │   └── 🧪 test_project.sh     # 项目完整性测试
+│   │   ├── 🧪 test_jlink.sh       # J-Link测试脚本
+│   │   └── 📋 [其他脚本]          # 各种开发脚本
 │   ├── 📁 debug/                  # 调试配置
+│   │   ├── ⚙️ jlink_config.jlink  # J-Link配置文件
 │   │   └── ⚙️ openocd_nano100.cfg # OpenOCD配置文件
 │   └── 📁 test/                   # 测试工具
 │       └── 🐍 test_ota.py         # OTA功能测试工具
+├── 📁 docs/                       # 📚 规范化文档系统
+│   ├── 📁 development/            # 🔧 开发文档
+│   ├── 📁 manuals/                # 📖 用户手册
+│   ├── 📁 architecture/           # 🏗️ 架构设计
+│   ├── 📁 reports/                # 📊 分析报告
+│   ├── 📁 api/                    # 🔌 API文档
+│   ├── 📄 FLASH_GUIDE.md          # 烧录指南
+│   └── 📄 FAQ.md                  # 常见问题
+├── 📁 hardware/                   # 硬件相关文件
+│   ├── 📁 pcb/                    # PCB设计文件
+│   └── 📁 schematic/              # 原理图文件
+├── 📁 cmake/                      # CMake配置文件
+│   └── 📄 arm-none-eabi.cmake     # ARM工具链配置
 ├── 📁 .vscode/                    # VS Code/Cursor配置
 │   ├── ⚙️ settings.json           # 编辑器设置
 │   ├── 🚀 launch.json             # 调试配置
 │   ├── 📋 tasks.json              # 任务配置
 │   └── 🧩 extensions.json        # 扩展推荐
-├── 📁 cmake/                      # CMake配置文件
-├── 📁 docs/                       # 文档目录
-├── 📁 hardware/                   # 硬件相关文件
+├── 📁 scripts/                    # 额外脚本
+│   └── 🐍 update_progress.py      # 进度更新脚本
 ├── 🔨 CMakeLists.txt              # CMake主配置
 ├── ⚡ platformio.ini              # PlatformIO配置
+├── 🔥 flash.sh                    # 快速烧录脚本
 ├── 🎨 .clang-format               # 代码格式化配置
-├── 📚 README.md                   # 项目说明
-├── 📖 OTA_DEV.md                  # OTA开发手册 (18KB)
-└── 🚀 quick_setup.sh              # 快速安装脚本 (9.5KB)
+├── 📚 README.md                   # 项目说明文档
+├── 🚀 quick_setup.sh              # 快速环境配置脚本
+├── 📄 CHANGELOG.md                # 版本更新历史
+├── 📄 CONTRIBUTING.md             # 贡献指南
+├── 📄 LICENSE                     # MIT开源许可证
+├── 📄 .gitignore                  # Git忽略规则
+├── 📄 DEVELOPMENT_STATUS.md       # 开发状态文档
+├── 📄 PROJECT_STATUS.md           # 项目状态文档
+└── 📄 DIRECTORY_NORMALIZATION_REPORT.md # 目录规范化报告
 ```
 
 ## ✅ 已完成的功能

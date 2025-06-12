@@ -22,24 +22,93 @@
 
 ```
 hy-cool-dtu/                    # 项目根目录
-├── 📁 src/                     # 源代码 (原App_with_ota)
 ├── 📁 app/                     # 应用程序代码
+│   ├── 📁 ota/                 # OTA应用层模块
+│   │   ├── config/             # OTA配置文件
+│   │   ├── include/            # OTA头文件
+│   │   ├── src/                # OTA源文件
+│   │   └── test/               # OTA测试文件
+│   └── main.c                  # 主程序入口
+├── 📁 src/                     # 源代码目录
+│   ├── 📁 include/             # 项目头文件
+│   │   ├── constants.h         # 常量定义
+│   │   ├── core_cm0plus.h      # ARM核心定义
+│   │   ├── global.h            # 全局定义
+│   │   ├── Nano100Series.h     # NANO100芯片定义
+│   │   ├── stdio.h             # 标准输入输出
+│   │   ├── stdlib.h            # 标准库
+│   │   ├── string.h            # 字符串操作
+│   │   └── stdint.h            # 标准整数类型
+│   ├── 📁 ota/                 # OTA核心模块
+│   ├── 📁 uart/                # UART通信模块
+│   ├── 📁 sht2x/               # 温湿度传感器
+│   ├── 📁 sim7600/             # 4G通信模块
+│   ├── 📁 si24r1/              # LoRa通信模块
+│   ├── 📁 lcd/                 # LCD显示模块
+│   ├── 📁 led/                 # LED控制模块
+│   ├── 📁 alarm/               # 报警模块
+│   ├── 📁 alarm_led/           # 报警LED模块
+│   ├── 📁 key/                 # 按键模块
+│   ├── 📁 dido/                # 数字IO模块
+│   ├── 📁 i2c/                 # I2C通信模块
+│   ├── 📁 spi/                 # SPI通信模块
+│   ├── 📁 adc/                 # ADC模块
+│   ├── 📁 pwm/                 # PWM模块
+│   ├── 📁 workled/             # 工作LED模块
+│   ├── 📁 lora/                # LoRa通信
+│   ├── 📁 switch/              # 开关控制
+│   ├── 📁 watchdong/           # 看门狗模块
+│   ├── 📁 bl/                  # 引导加载器
+│   ├── 📁 test_function/       # 测试功能
+│   ├── 📁 linker/              # 链接器脚本
+│   │   └── nano100_512k.ld     # NANO100B链接脚本
+│   ├── main_loop.c             # 主循环
+│   ├── Modbus.c                # Modbus协议实现
+│   └── [其他源文件]            # 各种功能源文件
 ├── 📁 tools/                   # 开发工具链
+│   ├── 📁 scripts/             # 构建和调试脚本
+│   │   ├── flash_firmware.sh   # 固件烧写脚本
+│   │   ├── test_jlink.sh       # J-Link测试脚本
+│   │   ├── build.sh            # 构建脚本
+│   │   └── [其他脚本]          # 各种开发脚本
+│   ├── 📁 debug/               # 调试配置
+│   │   ├── jlink_config.jlink  # J-Link配置
+│   │   └── openocd_nano100.cfg # OpenOCD配置
+│   └── 📁 test/                # 测试工具
+│       └── test_ota.py         # OTA测试脚本
 ├── 📁 docs/                    # 📚 规范化文档系统
 │   ├── 📂 development/         # 🔧 开发文档 (5个)
 │   ├── 📂 manuals/             # 📖 用户手册 (4个)
 │   ├── 📂 architecture/        # 🏗️ 架构设计 (6个+13个模块)
 │   ├── 📂 reports/             # 📊 分析报告 (1个)
-│   └── 📂 api/                 # 🔌 API文档
+│   ├── 📂 api/                 # 🔌 API文档
+│   ├── FLASH_GUIDE.md          # 烧录指南
+│   └── FAQ.md                  # 常见问题
 ├── 📁 hardware/                # 硬件相关文件
+│   ├── pcb/                    # PCB设计文件
+│   └── schematic/              # 原理图
 ├── 📁 cmake/                   # CMake配置文件
-├── 📁 .vscode/                 # IDE配置
+│   └── arm-none-eabi.cmake     # ARM工具链配置
+├── 📁 .vscode/                 # VS Code/Cursor IDE配置
+│   ├── settings.json           # 编辑器设置
+│   ├── launch.json             # 调试配置
+│   ├── tasks.json              # 任务配置
+│   └── extensions.json         # 扩展推荐
+├── 📁 scripts/                 # 额外脚本
+│   └── update_progress.py      # 进度更新脚本
+├── 📄 CMakeLists.txt           # CMake主配置
+├── 📄 platformio.ini           # PlatformIO配置
+├── 📄 flash.sh                 # 快速烧录脚本
+├── 📄 quick_setup.sh           # 快速环境配置脚本
 ├── 📄 README.md                # 🚀 专业级项目说明
 ├── 📄 CONTRIBUTING.md          # 🤝 贡献指南
 ├── 📄 LICENSE                  # 📜 MIT许可证
 ├── 📄 CHANGELOG.md             # 📈 版本历史
-├── 📄 FAQ.md                   # ❓ 常见问题
-└── 📄 .gitignore               # 🔒 Git忽略规则
+├── 📄 .gitignore               # 🔒 Git忽略规则
+├── 📄 .clang-format            # 代码格式化配置
+├── 📄 DEVELOPMENT_STATUS.md    # 开发状态
+├── 📄 PROJECT_STATUS.md        # 项目状态
+└── 📄 DIRECTORY_NORMALIZATION_REPORT.md # 目录规范化报告
 ```
 
 ### ✅ 文档分类整理

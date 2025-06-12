@@ -1,0 +1,165 @@
+# 脱机编译测试 Makefile
+# 用于在没有硬件连接的情况下进行编译测试
+
+# 工具链配置
+CC = arm-none-eabi-gcc
+OBJCOPY = arm-none-eabi-objcopy
+SIZE = arm-none-eabi-size
+
+# 编译选项
+CPU = -mcpu=cortex-m0plus
+MTHUMB = -mthumb
+MFLOAT = -mfloat-abi=soft
+
+CFLAGS = $(CPU) $(MTHUMB) $(MFLOAT)
+CFLAGS += -Wall -Wextra -std=c99
+CFLAGS += -fdata-sections -ffunction-sections
+CFLAGS += -nostdlib -fno-builtin
+CFLAGS += -g -O0  # Debug模式
+
+# 包含路径
+INCLUDES = -Isrc/include -Iapp/ota/include
+
+# 源文件
+SOURCES = src/main_loop.c \
+          src/Modbus.c \
+          src/io.c \
+          src/sys_flash.c \
+          src/RI300CRC.c \
+          src/datastruct.c \
+          src/alarm.C \
+          src/Base_Para.C
+
+# 测试目标
+OBJECTS = $(SOURCES:.c=.o)
+TARGET = build/test/hy-cool-dtu-test
+
+# 创建目录
+$(shell mkdir -p build/test build/logs)
+
+.PHONY: all clean syntax-check cmake-test test-all help
+
+# 默认目标
+all: help
+
+# 显示帮助
+help:
+	@echo "=== hy-cool-dtu 脱机编译测试 ==="
+	@echo ""
+	@echo "可用目标:"
+	@echo "  syntax-check  - 进行C代码语法检查"
+	@echo "  cmake-test    - 测试CMake构建"
+	@echo "  test-all      - 运行所有测试"
+	@echo "  clean         - 清理构建文件"
+	@echo "  help          - 显示此帮助信息"
+	@echo ""
+	@echo "示例:"
+	@echo "  make -f Makefile.test syntax-check"
+	@echo "  make -f Makefile.test test-all"
+
+# 语法检查
+syntax-check:
+	@echo "=== C代码语法检查 ==="
+	@echo "检查编译工具链..."
+	@if ! which $(CC) > /dev/null 2>&1; then \
+		echo "❌ ARM GCC 未安装，请运行: brew install --cask gcc-arm-embedded"; \
+		exit 1; \
+	fi
+	@echo "✅ ARM GCC: $$($(CC) --version | head -n1)"
+	@echo ""
+	@echo "开始语法检查..."
+	@error_count=0; \
+	for file in $(SOURCES); do \
+		if [ -f "$$file" ]; then \
+			echo "检查: $$file"; \
+			if $(CC) $(CFLAGS) $(INCLUDES) -fsyntax-only "$$file" 2>build/logs/syntax_$$(date +%s).log; then \
+				echo "  ✅ 语法正确"; \
+			else \
+				echo "  ❌ 有语法错误"; \
+				error_count=$$((error_count + 1)); \
+				tail -n 3 build/logs/syntax_$$(date +%s).log | sed 's/^/    /'; \
+			fi; \
+		else \
+			echo "⚠️  文件不存在: $$file"; \
+		fi; \
+	done; \
+	echo ""; \
+	if [ $$error_count -eq 0 ]; then \
+		echo "🎉 所有文件语法检查通过！"; \
+	else \
+		echo "❌ $$error_count 个文件有语法错误"; \
+		exit 1; \
+	fi
+
+# CMake测试
+cmake-test:
+	@echo "=== CMake编译测试 ==="
+	@if [ ! -f "CMakeLists.txt" ]; then \
+		echo "❌ CMakeLists.txt 不存在"; \
+		exit 1; \
+	fi
+	@if [ ! -f "cmake/arm-none-eabi.cmake" ]; then \
+		echo "❌ ARM工具链文件不存在"; \
+		exit 1; \
+	fi
+	@echo "准备构建目录..."
+	@rm -rf build/test_cmake
+	@mkdir -p build/test_cmake
+	@echo "配置CMake项目..."
+	@cd build/test_cmake && \
+	if cmake -DCMAKE_TOOLCHAIN_FILE=../../cmake/arm-none-eabi.cmake -DCMAKE_BUILD_TYPE=Debug ../..; then \
+		echo "✅ CMake配置成功"; \
+		echo "开始编译..."; \
+		if make -j4; then \
+			echo "🎉 CMake编译成功！"; \
+			if [ -f "hy-cool-dtu.elf" ]; then \
+				echo "✅ 编译产物:"; \
+				ls -la hy-cool-dtu.*; \
+				if which $(SIZE) > /dev/null 2>&1; then \
+					echo "📊 固件大小:"; \
+					$(SIZE) hy-cool-dtu.elf; \
+				fi; \
+			fi; \
+		else \
+			echo "❌ CMake编译失败"; \
+			exit 1; \
+		fi; \
+	else \
+		echo "❌ CMake配置失败"; \
+		exit 1; \
+	fi
+
+# 运行所有测试
+test-all: 
+	@echo "🚀 开始完整的脱机编译测试"
+	@echo "时间: $$(date)"
+	@echo "项目路径: $$(pwd)"
+	@echo ""
+	@$(MAKE) -f Makefile.test syntax-check
+	@echo ""
+	@$(MAKE) -f Makefile.test cmake-test
+	@echo ""
+	@echo "=== 测试总结 ==="
+	@echo "🎉 所有测试通过！脱机开发环境正常！"
+	@echo "✅ 您可以继续进行脱机开发"
+	@echo "💡 下一步建议:"
+	@echo "   1. 编辑 src/ 目录下的源文件"
+	@echo "   2. 定期运行测试验证代码变更"
+	@echo "   3. 连接硬件后使用 ./flash.sh 烧录"
+
+# 清理
+clean:
+	@echo "清理构建文件..."
+	@rm -rf build/test build/test_cmake build/logs/*.log
+	@echo "✅ 清理完成"
+
+# 创建测试报告
+report:
+	@echo "# hy-cool-dtu 脱机测试报告" > build/test_report.md
+	@echo "" >> build/test_report.md
+	@echo "- **测试时间**: $$(date)" >> build/test_report.md
+	@echo "- **项目路径**: $$(pwd)" >> build/test_report.md
+	@echo "- **ARM GCC**: $$($(CC) --version | head -n1 2>/dev/null || echo '未安装')" >> build/test_report.md
+	@echo "- **CMake**: $$(cmake --version | head -n1 2>/dev/null || echo '未安装')" >> build/test_report.md
+	@echo "" >> build/test_report.md
+	@echo "测试报告已生成: build/test_report.md" 
